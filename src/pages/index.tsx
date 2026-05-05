@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { Layout } from '../components'
 
 const Home: React.FC = () =>{
   return(
@@ -7,10 +8,7 @@ const Home: React.FC = () =>{
         <title>Vendas app</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      Bem Vindo!
-
-      <button className="button is-black">Black</button>
+      <Layout />
     </div>
   );
 }
