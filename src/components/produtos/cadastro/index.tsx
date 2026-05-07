@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Layout } from "@/components/layout";
+import { Input } from "@/components/common";
 
 
 
@@ -22,40 +23,26 @@ export const CadastroProdutos: React.FC = () => {
     return (
         <Layout titulo="Produtos">
             <div className="columns">
-                <div className="field is-half column">
-                    <label htmlFor="inputSKU" className="label">SKU: *</label>
-                    <div className="control">
-                        <input className="input" type="text"
-                            id="inputSKU" value={sku}
-                            onChange={event => setSku(event.target.value)}
-                            placeholder="Digite o SKU do produto" />
-                    </div>
-                </div>
-
-                <div className="field is-half column">
-                    <label htmlFor="inputPreco" className="label">Preço: *</label>
-                    <div className="control">
-                        <input className="input" type="text"
-                            id="inputPreco" value={preco}
-                            onChange={event => setPreco(event.target.value)}
-                            placeholder="Digite o Preço do produto" />
-                    </div>
-                </div>
-
+                <Input label="SKU: "
+                       columnClasses="is-half" 
+                       onChange={setSku} 
+                       id="inputSku" 
+                       placeholder='Digite o SKU do produto'/>
+                <Input label="Preço "
+                       columnClasses="is-half" 
+                       onChange={setPreco} 
+                       id="inputPreco" 
+                       placeholder='Digite o preço do produto'/>
             </div>
 
 
             <div className="columns">
-                <div className="field is-full column">
-                    <label htmlFor="inputNome" className="label">Nome: *</label>
-                    <div className="control">
-                        <input className="input" type="text"
-                            id="inputNome" value={nome}
-                            onChange={event => setNome(event.target.value)}
-                            placeholder="Digite o Nome do produto" />
-                    </div>
-                </div>
 
+                <Input label="Nome: "
+                       columnClasses="is-full" 
+                       onChange={setNome} 
+                       id="inputNome" 
+                       placeholder='Digite o nome do produto'/>
             </div>
 
             <div className="columns">
@@ -63,13 +50,12 @@ export const CadastroProdutos: React.FC = () => {
                     <label htmlFor="areaDesc" className="label">Descrição: *</label>
                     <div className="control">
                         <textarea className="textarea"
-                            placeholder="Descrição do Produto"
+                            placeholder="Descrição do produto"
                             id="areaDesc" value={descricao}
                             onChange={event => setDescricao(event.target.value)} />
                     </div>
                 </div>
             </div>
-
 
             <div className="field is-grouped">
                 <div className="control">
