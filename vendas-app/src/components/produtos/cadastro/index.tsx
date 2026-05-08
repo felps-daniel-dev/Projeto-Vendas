@@ -1,23 +1,27 @@
 import { useState } from 'react';
 import { Layout } from "@/components/layout";
 import { Input } from "@/components/common";
-
+import { useProdutoService } from  '@/app/services';
+import { Produto } from '@/app/models/produtos' 
 
 
 export const CadastroProdutos: React.FC = () => {
+    const service = useProdutoService();
     const [sku, setSku] = useState('');  // cria uma variavel com valor e tem a variavel e tambem a opção de alterar o valor
     const [preco, setPreco] = useState('');
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
 
+    const precoFormatado = preco.replace(',', '.')
     const submit = () => {
-        const produto = {
-            sku: sku,  // formato pra exibir em json. Caso a variavel tiver o mesmo nome nao prescisa de colocar o vcampo na ferente
-            preco: preco, 
-            nome: nome, 
-            descricao: descricao
+        const produto: Produto = {
+            sku,  // formato pra exibir em json. Caso a variavel tiver o mesmo nome nao prescisa de colocar o vcampo na ferente
+            preco: parseFloat(precoFormatado), 
+            nome, 
+            descricao
         }
-        console.log(produto);
+        service.cadastrar(produto)
+               .then(produtoResposta => console.log(produtoResposta));
     }
 
     return (
