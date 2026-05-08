@@ -9,6 +9,8 @@ import io.whister.vendasapi.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 public class ProdutoService {
 
@@ -23,6 +25,7 @@ public class ProdutoService {
 
         //vai chamar o metodo e vai transformar em entidade pra salvear no banco
         Produto produto = mapper.toEntity(produtoRequestDTO);
+        produto.setDataCadastro(LocalDate.now());
 
         //salvei no banco
         produto = repository.save(produto);

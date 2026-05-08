@@ -1,9 +1,8 @@
 export interface Produto{
-    id?: number;
+    id?: string;
     nome?: string;
     preco?: number;
     descricao?: string;
     sku?: string;
+    dataCadastro?: string;
 }
-
-const produto: Produto = {  }

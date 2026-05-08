@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Layout } from "@/components/layout";
 import { Input } from "@/components/common";
-import { useProdutoService } from  '@/app/services';
-import { Produto } from '@/app/models/produtos' 
+import { useProdutoService } from '@/app/services';
+import { Produto } from '@/app/models/produtos'
 
 
 export const CadastroProdutos: React.FC = () => {
@@ -11,42 +11,62 @@ export const CadastroProdutos: React.FC = () => {
     const [preco, setPreco] = useState('');
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
+    const [id, setId] = useState<string | undefined>('');
+    const [dataCadastro, setdataCadastro] = useState<string | undefined>('');
 
     const precoFormatado = preco.replace(',', '.')
     const submit = () => {
         const produto: Produto = {
             sku,  // formato pra exibir em json. Caso a variavel tiver o mesmo nome nao prescisa de colocar o vcampo na ferente
-            preco: parseFloat(precoFormatado), 
-            nome, 
+            preco: parseFloat(precoFormatado),
+            nome,
             descricao
         }
         service.cadastrar(produto)
-               .then(produtoResposta => console.log(produtoResposta));
+            .then(produtoResposta => {
+                setId(produtoResposta.id)
+                setdataCadastro(produtoResposta.dataCadastro)
+            });
     }
 
     return (
         <Layout titulo="Produtos">
+            {id &&  //só vai incrementar na tela se o id não estiver vazio quando retornar o response
+                <div className="columns">
+                    <Input label="Código: "
+                        columnClasses="is-half"
+                        value={id}
+                        id="inputId"
+                        disabled />
+                    <Input label="Data de Cadastro: "
+                        columnClasses="is-half"
+                        value={dataCadastro}
+                        id="inputDataCadastro"
+                        disabled={true} />
+
+                </div>
+            }
             <div className="columns">
-                <Input label="SKU: "
-                       columnClasses="is-half" 
-                       onChange={setSku} 
-                       id="inputSku" 
-                       placeholder='Digite o SKU do produto'/>
+                <Input label="SKU "
+                    columnClasses="is-half"
+                    id="inputSku"
+                    placeholder='Digite o SKU do produto:' />
                 <Input label="Preço "
-                       columnClasses="is-half" 
-                       onChange={setPreco} 
-                       id="inputPreco" 
-                       placeholder='Digite o preço do produto'/>
+                    columnClasses="is-half"
+                    id="inputPreco"
+                    placeholder='Digite o preço do produto:' />
+
+
             </div>
 
 
             <div className="columns">
 
                 <Input label="Nome: "
-                       columnClasses="is-full" 
-                       onChange={setNome} 
-                       id="inputNome" 
-                       placeholder='Digite o nome do produto'/>
+                    columnClasses="is-full"
+                    onChange={setNome}
+                    id="inputNome"
+                    placeholder='Digite o nome do produto' />
             </div>
 
             <div className="columns">
