@@ -3,6 +3,7 @@ import { Layout } from "@/components/layout";
 import { Input } from "@/components/common";
 import { useProdutoService } from '@/app/services';
 import { Produto } from '@/app/models/produtos'
+import { converterBigDecimal } from '@/app/util/money'
 
 
 export const CadastroProdutos: React.FC = () => {
@@ -14,15 +15,16 @@ export const CadastroProdutos: React.FC = () => {
     const [id, setId] = useState<string | undefined>('');
     const [dataCadastro, setdataCadastro] = useState<string | undefined>('');
 
-    const precoFormatado = preco.replace(',', '.');
     const submit = () => {
-        const produto: Produto = {
-            id,
-            sku,  // formato pra exibir em json. Caso a variavel tiver o mesmo nome nao prescisa de colocar o vcampo na ferente
-            preco: parseFloat(precoFormatado),
-            nome,
-            descricao
-        }
+        const precoLimpo = preco.replace(/\./g, '').replace(',', '.');
+    
+    const produto: Produto = {
+        id: id ? id : undefined, // Se for "" vira undefined porque é autoincrement
+        sku,
+        preco: parseFloat(precoLimpo) || 0,
+        nome,
+        descricao
+    }
 
         console.log(produto);
         if (id) {
@@ -42,19 +44,17 @@ export const CadastroProdutos: React.FC = () => {
             {id &&  //só vai incrementar na tela se o id não estiver vazio quando retornar o response
                 <div className="columns">
                     <Input label="SKU "
-                        columnClasses="is-half"
                         id="inputSku"
-                        value={sku}
-                        onChange={setSku}
+                        value={sku}           
+                        onChange={setSku}      
                         placeholder='Digite o SKU do produto:' />
 
                     <Input label="Preço "
-                        columnClasses="is-half"
                         id="inputPreco"
-                        value={preco}
-                        onChange={setPreco}
-                        placeholder='Digite o preço do produto:'
-                        currency={true} />
+                        value={preco}         
+                        onChange={setPreco}    
+                        currency={true}
+                        placeholder='Digite o preço do produto:' />
                 </div>
             }
             <div className="columns">
