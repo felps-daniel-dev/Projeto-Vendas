@@ -17,16 +17,24 @@ export const CadastroProdutos: React.FC = () => {
     const precoFormatado = preco.replace(',', '.')
     const submit = () => {
         const produto: Produto = {
+            id,
             sku,  // formato pra exibir em json. Caso a variavel tiver o mesmo nome nao prescisa de colocar o vcampo na ferente
             preco: parseFloat(precoFormatado),
             nome,
             descricao
+        } 
+
+        console.log(produto);
+        if(id){
+            service.atualizar(produto)
+                   .then(response => console.log(produto));
+        } else {
+            service.cadastrar(produto)
+                .then(produtoResposta => {
+                    setId(produtoResposta.id)
+                    setdataCadastro(produtoResposta.dataCadastro);
+                });
         }
-        service.cadastrar(produto)
-            .then(produtoResposta => {
-                setId(produtoResposta.id)
-                setdataCadastro(produtoResposta.dataCadastro)
-            });
     }
 
     return (
@@ -83,7 +91,9 @@ export const CadastroProdutos: React.FC = () => {
 
             <div className="field is-grouped">
                 <div className="control">
-                    <button onClick={submit} className="button is-link" >Salvar</button>
+                    <button onClick={submit} className="button is-link" >
+                        {id ? "Atualizar" : "Salvar"}
+                    </button>
                 </div>
                 <div className="control">
                     <button className="button is-link is-light">Voltar</button>
