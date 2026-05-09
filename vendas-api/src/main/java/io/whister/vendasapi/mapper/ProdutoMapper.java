@@ -4,6 +4,7 @@ import io.whister.vendasapi.dto.ProdutoRequestDTO;
 import io.whister.vendasapi.dto.ProdutoResponseDTO;
 import io.whister.vendasapi.entity.Produto;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface ProdutoMapper {

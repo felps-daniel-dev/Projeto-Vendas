@@ -14,7 +14,7 @@ export const CadastroProdutos: React.FC = () => {
     const [id, setId] = useState<string | undefined>('');
     const [dataCadastro, setdataCadastro] = useState<string | undefined>('');
 
-    const precoFormatado = preco.replace(',', '.')
+    const precoFormatado = preco.replace(',', '.');
     const submit = () => {
         const produto: Produto = {
             id,
@@ -22,12 +22,12 @@ export const CadastroProdutos: React.FC = () => {
             preco: parseFloat(precoFormatado),
             nome,
             descricao
-        } 
+        }
 
         console.log(produto);
-        if(id){
+        if (id) {
             service.atualizar(produto)
-                   .then(response => console.log(produto));
+                .then(response => console.log(produto));
         } else {
             service.cadastrar(produto)
                 .then(produtoResposta => {
@@ -41,17 +41,20 @@ export const CadastroProdutos: React.FC = () => {
         <Layout titulo="Produtos">
             {id &&  //só vai incrementar na tela se o id não estiver vazio quando retornar o response
                 <div className="columns">
-                    <Input label="Código: "
+                    <Input label="SKU "
                         columnClasses="is-half"
-                        value={id}
-                        id="inputId"
-                        disabled />
-                    <Input label="Data de Cadastro: "
-                        columnClasses="is-half"
-                        value={dataCadastro}
-                        id="inputDataCadastro"
-                        disabled={true} />
+                        id="inputSku"
+                        value={sku}
+                        onChange={setSku}
+                        placeholder='Digite o SKU do produto:' />
 
+                    <Input label="Preço "
+                        columnClasses="is-half"
+                        id="inputPreco"
+                        value={preco}
+                        onChange={setPreco}
+                        placeholder='Digite o preço do produto:'
+                        currency={true} />
                 </div>
             }
             <div className="columns">
@@ -62,7 +65,8 @@ export const CadastroProdutos: React.FC = () => {
                 <Input label="Preço "
                     columnClasses="is-half"
                     id="inputPreco"
-                    placeholder='Digite o preço do produto:' />
+                    placeholder='Digite o preço do produto:'
+                    currency={true} />
 
 
             </div>

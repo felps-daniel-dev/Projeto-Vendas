@@ -25,7 +25,7 @@ public class ProdutoService {
     @Autowired
     private ProdutoMapper mapper;
 
-    public ProdutoResponseDTO cadastrar(ProdutoRequestDTO produtoRequestDTO){
+    public ProdutoResponseDTO cadastrar(ProdutoRequestDTO produtoRequestDTO) {
 
         //vai chamar o metodo e vai transformar em entidade pra salvear no banco
         Produto produto = mapper.toEntity(produtoRequestDTO);
@@ -37,16 +37,27 @@ public class ProdutoService {
         return mapper.toResponse(produto);
     }
 
-    public ProdutoResponseDTO atualizar(Long id, ProdutoRequestDTO produtoRequestDTO) {
-        if (!repository.existsById(id)) { // se não tiver nenhum registro com esse id
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado");
+    public ProdutoResponseDTO atualizar(Long id, ProdutoRequestDTO prodRequestDTO) {
+        Produto produto = repository.findById(id).orElseThrow();
+
+        if (prodRequestDTO.sku() != null) {
+            produto.setSku(prodRequestDTO.sku());
         }
-        Produto produtoParaSalvar = mapper.toEntity(produtoRequestDTO);
-        produtoParaSalvar.setId(id);// sempre chamar o set id pra que o spring entenda que é atualizar e não cadastrar
-        Produto produtoAtualizado = repository.save(produtoParaSalvar);
 
-        return mapper.toResponse(produtoAtualizado);
+        if (prodRequestDTO.nome() != null) {
+            produto.setNome(prodRequestDTO.nome());
+        }
+
+        if (prodRequestDTO.preco() != null) {
+            produto.setPreco(prodRequestDTO.preco());
+        }
+
+        if (prodRequestDTO.descricao() != null) {
+            produto.setDescricao(prodRequestDTO.descricao());
+        }
+
+        return mapper.toResponse(repository.save(produto));
     }
-
-
 }
+
+
