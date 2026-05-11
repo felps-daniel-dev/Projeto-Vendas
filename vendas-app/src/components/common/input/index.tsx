@@ -8,6 +8,7 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChan
     label: string;
     columnClasses?: string;
     currency?: boolean;
+    error?: string;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -16,6 +17,7 @@ export const Input: React.FC<InputProps> = ({
     currency,
     columnClasses,
     id,
+    error,
     ...inputProps
 }: InputProps) => {
 
@@ -38,6 +40,9 @@ export const Input: React.FC<InputProps> = ({
                 <input className="input" type="text"
                     id={id} {...inputProps}
                     onChange={onInputChange} />
+                    {error &&
+                    <p className="help is-danger">{error}</p>
+                    }
             </div>
         </div>
     );
