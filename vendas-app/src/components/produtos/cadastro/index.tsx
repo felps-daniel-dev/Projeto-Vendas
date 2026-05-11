@@ -122,7 +122,7 @@ export const CadastroProdutos: React.FC = () => {
                     onChange={setPreco}
                     currency={true}
                     placeholder='Digite o preço do produto:'
-                    error={errors.nome} />
+                    error={errors.preco} />
             </div>
 
             <div className="columns">
