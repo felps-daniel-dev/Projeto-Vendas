@@ -4,7 +4,8 @@ import io.whister.vendasapi.dto.ProdutoRequestDTO;
 import io.whister.vendasapi.dto.ProdutoResponseDTO;
 import io.whister.vendasapi.entity.Produto;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ProdutoMapper {
@@ -14,4 +15,7 @@ public interface ProdutoMapper {
 
     // vai transforrmar a entidade em response
     ProdutoResponseDTO toResponse(Produto produtoEntity);
+
+    // vai transformar a lista de entidades para response
+    List<ProdutoResponseDTO> toResponseList(List<Produto> prodEntidades);
 }

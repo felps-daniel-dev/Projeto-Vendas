@@ -7,6 +7,7 @@ import { Produto } from '@/app/models/produtos';
 import { converterBigDecimal } from '@/app/util/money';
 import { Alert } from '@/components/common/message';
 import * as yup from 'yup';
+import Link from 'next/link';
 
 const msgCampoObrigatorio = "Campo Obrigatório!";
 
@@ -82,7 +83,7 @@ export const CadastroProdutos: React.FC = () => {
             setErrors({
                 [field]: message
             })
-            
+
         })
 
     }
@@ -134,7 +135,7 @@ export const CadastroProdutos: React.FC = () => {
                     placeholder='Digite o nome do produto'
                     error={errors.nome}
                 />
-                
+
 
             </div>
 
@@ -149,8 +150,8 @@ export const CadastroProdutos: React.FC = () => {
                             onChange={event => setDescricao(event.target.value)}
                         />
                         {errors.descricao &&
-                    <p className='help is-danger'>error={errors.descricao} </p>
-                }
+                            <p className='help is-danger'>error={errors.descricao} </p>
+                        }
                     </div>
                 </div>
             </div>
@@ -162,7 +163,9 @@ export const CadastroProdutos: React.FC = () => {
                     </button>
                 </div>
                 <div className="control">
-                    <button className="button is-link is-light">Voltar</button>
+                    <Link href="/consultas/produtos">
+                        <button className="button is-link is-light">Voltar</button>
+                    </Link>
                 </div>
             </div>
 

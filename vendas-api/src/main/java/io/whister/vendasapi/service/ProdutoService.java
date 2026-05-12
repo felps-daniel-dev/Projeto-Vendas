@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class ProdutoService {
@@ -33,6 +34,11 @@ public class ProdutoService {
         return mapper.toResponse(produto);
     }
 
+    public List<ProdutoResponseDTO> listar() {
+        List<Produto> produtos = repository.findAll();
+        return mapper.toResponseList(produtos);
+    }
+
     public ProdutoResponseDTO atualizar(Long id, ProdutoRequestDTO prodRequestDTO) {
         Produto produto = repository.findById(id).orElseThrow();
 
@@ -54,6 +60,8 @@ public class ProdutoService {
 
         return mapper.toResponse(repository.save(produto));
     }
+
+
 }
 
 

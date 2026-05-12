@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/produtos")
 @CrossOrigin("*")
@@ -32,6 +34,11 @@ public class ProdutoController {
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable Long id, @RequestBody ProdutoRequestDTO produtoRequestDTO) {
         return ResponseEntity.ok().body(service.atualizar(id, produtoRequestDTO));
+    }
+
+    @GetMapping
+    public List<ProdutoResponseDTO> listar(){
+        return service.listar();
     }
 
     @Autowired
