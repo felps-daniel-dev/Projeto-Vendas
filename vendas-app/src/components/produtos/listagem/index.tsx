@@ -15,9 +15,21 @@ export const ListagemProdutos: React.FC = () => {
             <Link href="/cadastros/produtos">
                 <button className="button is-link">Novo</button>
             </Link>
+
             <br />
-            <Loader show={!result}/>
-            <TabelaPodutos produtos={result?.data || []} />
+
+            { !result && !error ? (
+                <div className="is-flex is-justify-content-center">
+                   <Loader show={true}/>
+                </div>
+            ) : error ? (
+                <div className="notification is-danger">
+                    Erro ao carregar os produtos.
+                </div>
+            ) : (
+                <TabelaPodutos produtos={result?.data || []} />
+            )}
+
         </Layout>
     );
 }

@@ -4,32 +4,28 @@ interface LoaderProps {
 }
 
 
-export const Loader: React.FC<LoaderProps> = ({show}) => {
+export const Loader: React.FC<LoaderProps> = ({ show }) => {
 
     if (show) {
         <></>
     }
     return (
         <div id="loader" style={{
-            background: 'rgba(255,255,255,05)',
-            width: '100%',
-            height: '100%',
-            zIndex: 99999,
-            position: 'absolute',
-            left: '20%',
-            top: '30%'
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%', 
+            padding: '2rem 0',
+            minHeight: '150px'
         }}>
-            <div style={{
-                position: 'absolute',
-                left: '20%',
-                top: '30%'
-            }}>
-                <div className="lds-ring"><div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
+            <div className="lds-ring">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
             </div>
+            <span className="has-text-grey mt-3">Carregando...</span>
         </div>
     );
 }
