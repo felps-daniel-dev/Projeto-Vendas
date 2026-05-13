@@ -38,6 +38,11 @@ public class ProdutoController {
 
     @GetMapping
     public List<ProdutoResponseDTO> listar(){
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         return service.listar();
     }
 
