@@ -43,18 +43,20 @@ export const CadastroProdutos: React.FC = () => {
     const { id: queryId } = rounter.query;
 
     useEffect(() => {
-        if (queryId) {
-
-            service.carregarProduto(queryId as string).then(produtoEncontrado => {
-                console.log(produtoEncontrado)
-                setId(produtoEncontrado.id)
-                setSku(produtoEncontrado.sku)
-                setNome(produtoEncontrado.nome)
-                setDescricao(produtoEncontrado.descricao)
-                setPreco(formatReal(produtoEncontrado.preco))
-            })
-        }
-    }, [queryId, service]);
+        console.log("Dentro do effect")
+    if (queryId) {
+        service.carregarProduto(queryId as string).then(produtoEncontrado => {
+            console.log(produtoEncontrado)
+            
+            setId(produtoEncontrado.id)
+            setSku(produtoEncontrado.sku ?? '') 
+            setNome(produtoEncontrado.nome ?? '')
+            setDescricao(produtoEncontrado.descricao ?? '')
+            setPreco(formatReal(`${produtoEncontrado.preco ?? 0}`));
+            setdataCadastro(produtoEncontrado.dataCadastro || '');
+        })
+    }
+}, [queryId]);
 
     const submit = () => {
         const precoConvertido = converterBigDecimal(preco);// tratamento de preço
