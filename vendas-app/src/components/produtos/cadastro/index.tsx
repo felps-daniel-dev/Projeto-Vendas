@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+'use client';
+import { useState, useEffect, Suspense } from 'react';
 import { Layout } from "@/components/layout";
 import { Input } from "@/components/common";
 import { useProdutoService } from '@/app/services';
@@ -7,7 +8,7 @@ import { converterBigDecimal, formatReal } from '@/app/util/money';
 import { Alert } from '@/components/common/message';
 import * as yup from 'yup';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useSearchParams} from 'next/navigation';
 
 const msgCampoObrigatorio = "Campo Obrigatório!";
 
@@ -17,7 +18,10 @@ const validationSchema = yup.object().shape({
     descricao: yup.string()
         .trim()
         .required(msgCampoObrigatorio), //.min(5, "A descrição deve conter pelo menos 5 caracteres")
-    preco: yup.number().required(msgCampoObrigatorio).positive("O Preço deve ser maior que 0!") //moreThan(0, "O Valor deve ser maior que zero!")//morThean pede que a entrada deve ser maior que o parametro
+    preco: yup.number()
+        .required(msgCampoObrigatorio)
+        .positive("O Preço deve ser maior que 0!")
+        .typeError("O campo Preço é obrigatório e deve ser um número válido!")  //moreThan(0, "O Valor deve ser maior que zero!")//morThean pede que a entrada deve ser maior que o parametro
 });
 
 interface FormErros {
@@ -31,6 +35,11 @@ interface FormErros {
 export const CadastroProdutos: React.FC = () => {
     const service = useProdutoService();
 
+    const searchParams = useSearchParams();
+    const queryId = searchParams ? searchParams.get('id') : null;
+
+    console.log("ID capturado da URL:", queryId);
+
     const [sku, setSku] = useState('');
     const [preco, setPreco] = useState('');
     const [nome, setNome] = useState('');
@@ -39,24 +48,26 @@ export const CadastroProdutos: React.FC = () => {
     const [dataCadastro, setdataCadastro] = useState<string | undefined>('');
     const [messages, setMessages] = useState<Array<Alert>>([]);
     const [errors, setErrors] = useState<FormErros>({});
-    const rounter = useRouter();
-    const { id: queryId } = rounter.query;
 
     useEffect(() => {
         console.log("Dentro do effect")
-    if (queryId) {
-        service.carregarProduto(queryId as string).then(produtoEncontrado => {
-            console.log(produtoEncontrado)
-            
-            setId(produtoEncontrado.id)
-            setSku(produtoEncontrado.sku ?? '') 
-            setNome(produtoEncontrado.nome ?? '')
-            setDescricao(produtoEncontrado.descricao ?? '')
-            setPreco(formatReal(`${produtoEncontrado.preco ?? 0}`));
-            setdataCadastro(produtoEncontrado.dataCadastro || '');
-        })
-    }
-}, [queryId]);
+
+        if (queryId) {
+            service.carregarProduto(queryId as string).then(produtoEncontrado => {
+                console.log(produtoEncontrado)
+
+                setId(produtoEncontrado.id)
+                setSku(produtoEncontrado.sku ?? '')
+                setNome(produtoEncontrado.nome ?? '')
+                setDescricao(produtoEncontrado.descricao ?? '')
+                const precoFormatado = formatReal(produtoEncontrado.preco);
+                setPreco(precoFormatado);
+                setdataCadastro(produtoEncontrado.dataCadastro || '');
+            })
+        } else {
+            console.log("Fodase");
+        }
+    }, [queryId]);
 
     const submit = () => {
         const precoConvertido = converterBigDecimal(preco);// tratamento de preço
