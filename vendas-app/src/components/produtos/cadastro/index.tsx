@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Layout } from "@/components/layout";
 import { Input } from "@/components/common";
-import { Message } from "@/components/common/message"
 import { useProdutoService } from '@/app/services';
 import { Produto } from '@/app/models/produtos';
-import { converterBigDecimal } from '@/app/util/money';
+import { converterBigDecimal, formatReal } from '@/app/util/money';
 import { Alert } from '@/components/common/message';
 import * as yup from 'yup';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const msgCampoObrigatorio = "Campo Obrigatório!";
 
@@ -39,6 +39,22 @@ export const CadastroProdutos: React.FC = () => {
     const [dataCadastro, setdataCadastro] = useState<string | undefined>('');
     const [messages, setMessages] = useState<Array<Alert>>([]);
     const [errors, setErrors] = useState<FormErros>({});
+    const rounter = useRouter();
+    const { id: queryId } = rounter.query;
+
+    useEffect(() => {
+        if (queryId) {
+
+            service.carregarProduto(queryId as string).then(produtoEncontrado => {
+                console.log(produtoEncontrado)
+                setId(produtoEncontrado.id)
+                setSku(produtoEncontrado.sku)
+                setNome(produtoEncontrado.nome)
+                setDescricao(produtoEncontrado.descricao)
+                setPreco(formatReal(produtoEncontrado.preco))
+            })
+        }
+    }, [queryId, service]);
 
     const submit = () => {
         const precoConvertido = converterBigDecimal(preco);// tratamento de preço

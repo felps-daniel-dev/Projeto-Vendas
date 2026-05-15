@@ -3,9 +3,6 @@ package io.whister.vendasapi.controller;
 
 import io.whister.vendasapi.dto.ProdutoRequestDTO;
 import io.whister.vendasapi.dto.ProdutoResponseDTO;
-import io.whister.vendasapi.entity.Produto;
-import io.whister.vendasapi.mapper.ProdutoMapper;
-import io.whister.vendasapi.repository.ProdutoRepository;
 import io.whister.vendasapi.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,17 +38,9 @@ public class ProdutoController {
         return service.listar();
     }
 
-    @Autowired
-    ProdutoRepository repo;
-    @Autowired
-    ProdutoMapper mapp;
-
     @GetMapping("/{id}")
-    public ProdutoResponseDTO buscarPorId(@PathVariable Long id) {
-
-        Produto p = repo.findById(id).orElse(null);
-        return mapp.toResponse(p);
-
+    public ResponseEntity<ProdutoResponseDTO> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok().body(service.buscarPorId(id));
     }
 
 

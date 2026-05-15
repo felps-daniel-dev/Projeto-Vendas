@@ -39,6 +39,13 @@ public class ProdutoService {
         return mapper.toResponseList(produtos);
     }
 
+    public ProdutoResponseDTO buscarPorId(Long id) {
+        Produto produto =  repository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("Produto não encontrado"));
+        return mapper.toResponse(produto);
+
+    }
+
     public ProdutoResponseDTO atualizar(Long id, ProdutoRequestDTO prodRequestDTO) {
         Produto produto = repository.findById(id).orElseThrow();
 
@@ -60,6 +67,7 @@ public class ProdutoService {
 
         return mapper.toResponse(repository.save(produto));
     }
+
 
 
 }
