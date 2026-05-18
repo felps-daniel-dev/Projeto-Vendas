@@ -1,9 +1,10 @@
-export const converterBigDecimal = (value: string | number): number => {
+export const converterBigDecimal = (value: any): number => {
     if (!value) return 0;
     if (typeof value === 'number') return value;
     
-    const valorLimpo = value.replace(/\./g, '').replace(',', '.');
-    return parseFloat(valorLimpo);
+    // Remove R$, espaços e pontos de milhar, depois troca a vírgula por ponto
+    const valorLimpo = value.replace("R$", "").replace(/\s/g, "").replace(/\./g, "").replace(',', '.');
+    return parseFloat(valorLimpo) || 0; 
 }
 
 export const formatReal = (valor: any): string => {

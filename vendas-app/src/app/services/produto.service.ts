@@ -21,9 +21,15 @@ export const useProdutoService = () => {
         return response.data;
     }
 
+    const deletar = async (id: string) : Promise<void> =>{
+        const url: string = `${resourceURL}/${id}`;
+        await httpClient.delete(url);
+    }
+
     return{
         cadastrar,
         atualizar,
-        carregarProduto
+        carregarProduto,
+        deletar
     }
 }

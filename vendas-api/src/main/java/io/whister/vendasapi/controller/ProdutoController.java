@@ -33,6 +33,12 @@ public class ProdutoController {
         return ResponseEntity.ok().body(service.atualizar(id, produtoRequestDTO));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id){
+        service.deletar(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping
     public List<ProdutoResponseDTO> listar(){
         return service.listar();

@@ -8,7 +8,7 @@ import { converterBigDecimal, formatReal } from '@/app/util/money';
 import { Alert } from '@/components/common/message';
 import * as yup from 'yup';
 import Link from 'next/link';
-import { useSearchParams} from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 const msgCampoObrigatorio = "Campo Obrigatório!";
 
@@ -18,10 +18,12 @@ const validationSchema = yup.object().shape({
     descricao: yup.string()
         .trim()
         .required(msgCampoObrigatorio), //.min(5, "A descrição deve conter pelo menos 5 caracteres")
-    preco: yup.number()
+    preco: yup.string() // Mude de number para string
         .required(msgCampoObrigatorio)
-        .positive("O Preço deve ser maior que 0!")
-        .typeError("O campo Preço é obrigatório e deve ser um número válido!")  //moreThan(0, "O Valor deve ser maior que zero!")//morThean pede que a entrada deve ser maior que o parametro
+        .test("preco-valido", "O valor deve ser maior que 0", (value) => {
+            const numerico = converterBigDecimal(value);
+            return numerico > 0;
+        })
 });
 
 interface FormErros {
@@ -50,8 +52,6 @@ export const CadastroProdutos: React.FC = () => {
     const [errors, setErrors] = useState<FormErros>({});
 
     useEffect(() => {
-        console.log("Dentro do effect")
-
         if (queryId) {
             service.carregarProduto(queryId as string).then(produtoEncontrado => {
                 console.log(produtoEncontrado)
@@ -64,36 +64,28 @@ export const CadastroProdutos: React.FC = () => {
                 setPreco(precoFormatado);
                 setdataCadastro(produtoEncontrado.dataCadastro || '');
             })
-        } else {
-            console.log("Fodase");
         }
     }, [queryId]);
 
     const submit = () => {
-        const precoConvertido = converterBigDecimal(preco);// tratamento de preço
+        const valorNumerico = converterBigDecimal(preco); // Converte primeiro 
 
         const produto: Produto = {
             id,
             sku,
-            preco: precoConvertido,
             nome,
-            descricao
+            descricao,
+            preco: valorNumerico // Passa o número já limpo 
         }
-
-        console.log("Objeto enviado:", produto);
+        
 
         validationSchema.validate(produto).then(obj => {
             setErrors({});// quando der rudo certo vai salvar
 
             if (id) {
-                service.atualizar(produto)
-                    .then(response =>
-                        setMessages([{
-                            tipo: "success",
-                            texto: "Produto salvo com sucesso!"
-                        }
-                        ])
-                    );
+                service.atualizar(produto).then(response => {
+                    setMessages([{ tipo: "success", texto: "Produto atualizado com sucesso!" }]);
+                });
             } else {
                 service.cadastrar(produto)
                     .then(produtoResposta => {
