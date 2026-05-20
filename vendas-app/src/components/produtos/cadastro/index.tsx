@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, Suspense } from 'react';
 import { Layout } from "@/components/layout";
-import { Input } from "@/components/common";
+import { Input, InputMoney } from "@/components/common";
 import { useProdutoService } from '@/app/services';
 import { Produto } from '@/app/models/produtos';
 import { converterBigDecimal, formatReal } from '@/app/util/money';
@@ -77,7 +77,7 @@ export const CadastroProdutos: React.FC = () => {
             descricao,
             preco: valorNumerico // Passa o número já limpo 
         }
-        
+
 
         validationSchema.validate(produto).then(obj => {
             setErrors({});// quando der rudo certo vai salvar
@@ -133,16 +133,17 @@ export const CadastroProdutos: React.FC = () => {
                     columnClasses="is-half"
                     id="inputSku"
                     value={sku}
-                    onChange={setSku}
+                    onChange={(e: any) => setSku(e.target.value)} 
+                    autoComplete="off"
                     placeholder='Digite o SKU do produto:'
                     error={errors.sku} />
 
-                <Input label="Preço "
+                <InputMoney label="Preço "
                     columnClasses="is-half"
                     id="inputPreco"
                     value={preco}
-                    onChange={setPreco}
-                    currency={true}
+                    onChange={(e: any) =>setPreco(e.target.value)}
+                    autoComplete="off"
                     placeholder='Digite o preço do produto:'
                     error={errors.preco} />
             </div>
@@ -151,8 +152,9 @@ export const CadastroProdutos: React.FC = () => {
                 <Input label="Nome: "
                     columnClasses="is-full"
                     value={nome}
-                    onChange={setNome}
+                    onChange={(e: any) => setNome(e.target.value)}
                     id="inputNome"
+                    autoComplete="off"
                     placeholder='Digite o nome do produto'
                     error={errors.nome}
                 />
